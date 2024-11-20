@@ -7,9 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 const data = [
   { product: 'Calabresa', amount: 40 },
   { product: 'Pepperoni', amount: 30 },
-  { product: 'Marguerita', amount: 24 },
-  { product: '4 Queijos', amount: 16 },
-  { product: 'Frango', amount: 26 },
+  { product: 'Marguerita', amount: 16 },
+  { product: '4 Queijos', amount: 26 },
+  { product: 'Frango', amount: 22 },
 ]
 
 const COLORS = [
