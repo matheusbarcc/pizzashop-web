@@ -13,17 +13,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu'
+import { Skeleton } from './ui/skeleton'
 
 export function AccountMenu() {
-  const { data: profile } = useQuery({
+  const { data: profile, isLoading: isLoadingProfile } = useQuery({
     queryKey: ['profile'],
     queryFn: getProfile,
   })
 
-  const { data: managedRestaurant } = useQuery({
-    queryKey: ['managed-restaurant'],
-    queryFn: getManagedRestaurant,
-  })
+  const { data: managedRestaurant, isLoading: isLoadingManagedRestaurand } =
+    useQuery({
+      queryKey: ['managed-restaurant'],
+      queryFn: getManagedRestaurant,
+    })
 
   return (
     <DropdownMenu>
@@ -32,16 +34,29 @@ export function AccountMenu() {
           variant={'outline'}
           className="flex select-none items-center gap-2"
         >
-          {managedRestaurant?.name ?? 'Pizza Shop'}
+          {isLoadingManagedRestaurand ? (
+            <Skeleton className="h-4 w-40" />
+          ) : (
+            (managedRestaurant?.name ?? 'Pizza Shop')
+          )}
           <ChevronDown className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel className="flex flex-col">
-          <span>{profile?.name ?? 'Matheus Barcelos'}</span>
-          <span className="text-xs font-normal text-muted-foreground">
-            {profile?.email ?? 'matheus@email.com'}
-          </span>
+          {isLoadingProfile ? (
+            <div className="space-y-1.5">
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-4 w-32" />
+            </div>
+          ) : (
+            <>
+              <span>{profile?.name ?? 'Matheus Barcelos'}</span>
+              <span className="text-xs font-normal text-muted-foreground">
+                {profile?.email ?? 'matheus@email.com'}
+              </span>
+            </>
+          )}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
