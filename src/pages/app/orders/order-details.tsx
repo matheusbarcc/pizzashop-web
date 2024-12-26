@@ -16,7 +16,6 @@ import {
   TableRow,
 } from '@/components/ui/table'
 
-//
 export function OrderDetails() {
   return (
     <DialogContent>

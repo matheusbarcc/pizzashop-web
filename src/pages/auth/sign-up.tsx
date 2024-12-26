@@ -1,57 +1,11 @@
-import { useMutation } from '@tanstack/react-query'
 import { Helmet } from 'react-helmet-async'
-import { useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom'
-import { toast } from 'sonner'
-import { z } from 'zod'
+import { Link } from 'react-router-dom'
 
-import { registerRestaurant } from '@/api/register-restaurant'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
-const signUpForm = z.object({
-  restaurantName: z.string(),
-  managerName: z.string(),
-  phone: z.string(),
-  email: z.string().email(),
-})
-
-type SignUpForm = z.infer<typeof signUpForm>
-
 export function SignUp() {
-  const navigate = useNavigate()
-
-  const {
-    register,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = useForm<SignUpForm>()
-
-  const { mutateAsync: registerRestaurantFn } = useMutation({
-    mutationFn: registerRestaurant,
-  })
-
-  async function handleSignUp(data: SignUpForm) {
-    try {
-      await registerRestaurantFn({
-        restaurantName: data.restaurantName,
-        managerName: data.managerName,
-        email: data.email,
-        phone: data.phone,
-      })
-
-      toast.success('Restaurante cadastrado com sucesso!', {
-        action: {
-          label: 'Login',
-          onClick: () => navigate(`/sign-in?email=${data.email}`),
-        },
-      })
-    } catch {
-      toast.error('Erro ao cadastrar restaurante.')
-    }
-  }
-
   return (
     <>
       <Helmet title="Cadastro" />
@@ -70,36 +24,28 @@ export function SignUp() {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit(handleSignUp)} className="space-y-4">
+          <form className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="restaurantName">Nome do estabelecimento</Label>
-              <Input
-                id="restaurantName"
-                type="text"
-                {...register('restaurantName')}
-              />
+              <Input id="restaurantName" type="text" />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="managerName">Seu nome</Label>
-              <Input
-                id="managerName"
-                type="text"
-                {...register('managerName')}
-              />
+              <Input id="managerName" type="text" />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="email">Seu e-mail</Label>
-              <Input id="email" type="email" {...register('email')} />
+              <Input id="email" type="email" />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="phone">Seu celular</Label>
-              <Input id="phone" type="tel" {...register('phone')} />
+              <Input id="phone" type="tel" />
             </div>
 
-            <Button disabled={isSubmitting} className="w-full" type="submit">
+            <Button className="w-full" type="submit">
               Finalizar cadastro
             </Button>
 
