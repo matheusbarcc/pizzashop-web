@@ -2,7 +2,7 @@ import { http, HttpResponse } from 'msw'
 
 import { GetMonthCanceledOrdersAmountResponse } from '../get-month-canceled-orders-amount'
 
-export const GetMonthCanceledOrdersAmountMock = http.get<
+export const getMonthCanceledOrdersAmountMock = http.get<
   never,
   never,
   GetMonthCanceledOrdersAmountResponse
