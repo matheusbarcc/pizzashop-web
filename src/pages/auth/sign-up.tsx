@@ -1,36 +1,37 @@
-import { useMutation } from '@tanstack/react-query'
-import { Helmet } from 'react-helmet-async'
-import { useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom'
-import { toast } from 'sonner'
-import { z } from 'zod'
+import { useMutation } from "@tanstack/react-query";
+import { Helmet } from "react-helmet-async";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { z } from "zod";
 
-import { registerRestaurant } from '@/api/register-restaurant'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { registerRestaurant } from "@/api/register-restaurant";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const signUpForm = z.object({
   restaurantName: z.string(),
   managerName: z.string(),
   phone: z.string(),
   email: z.string().email(),
-})
+  password: z.string(),
+});
 
-type SignUpForm = z.infer<typeof signUpForm>
+type SignUpForm = z.infer<typeof signUpForm>;
 
 export function SignUp() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
     formState: { isSubmitting },
-  } = useForm<SignUpForm>()
+  } = useForm<SignUpForm>();
 
   const { mutateAsync: registerRestaurantFn } = useMutation({
     mutationFn: registerRestaurant,
-  })
+  });
 
   async function handleSignUp(data: SignUpForm) {
     try {
@@ -39,16 +40,17 @@ export function SignUp() {
         managerName: data.managerName,
         email: data.email,
         phone: data.phone,
-      })
+        password: data.password,
+      });
 
-      toast.success('Restaurante cadastrado com sucesso!', {
+      toast.success("Restaurante cadastrado com sucesso!", {
         action: {
-          label: 'Login',
+          label: "Login",
           onClick: () => navigate(`/sign-in?email=${data.email}`),
         },
-      })
+      });
     } catch {
-      toast.error('Erro ao cadastrar restaurante.')
+      toast.error("Erro ao cadastrar restaurante.");
     }
   }
 
@@ -76,7 +78,7 @@ export function SignUp() {
               <Input
                 id="restaurantName"
                 type="text"
-                {...register('restaurantName')}
+                {...register("restaurantName")}
               />
             </div>
 
@@ -85,18 +87,23 @@ export function SignUp() {
               <Input
                 id="managerName"
                 type="text"
-                {...register('managerName')}
+                {...register("managerName")}
               />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="email">Seu e-mail</Label>
-              <Input id="email" type="email" {...register('email')} />
+              <Input id="email" type="email" {...register("email")} />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="phone">Seu celular</Label>
-              <Input id="phone" type="tel" {...register('phone')} />
+              <Input id="phone" type="tel" {...register("phone")} />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password">Sua senha</Label>
+              <Input id="password" type="password" {...register("password")} />
             </div>
 
             <Button disabled={isSubmitting} className="w-full" type="submit">
@@ -107,8 +114,8 @@ export function SignUp() {
               Ao continuar, você concorda com nossos <br />
               <a className="underline underline-offset-4" href="">
                 termos de serviço
-              </a>{' '}
-              e{' '}
+              </a>{" "}
+              e{" "}
               <a className="underline underline-offset-4" href="">
                 políticas de privacidade
               </a>
@@ -118,5 +125,5 @@ export function SignUp() {
         </div>
       </div>
     </>
-  )
+  );
 }
