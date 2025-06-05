@@ -1,16 +1,16 @@
-import { useQuery } from '@tanstack/react-query'
-import { DollarSign } from 'lucide-react'
+import { useQuery } from "@tanstack/react-query";
+import { DollarSign } from "lucide-react";
 
-import { getMonthRevenue } from '@/api/get-month-revenue'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { getMonthRevenue } from "@/api/get-month-revenue";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-import { MetricCardSkeleton } from './metric-card-skeleton'
+import { MetricCardSkeleton } from "./metric-card-skeleton";
 
 export function MonthRevenueCard() {
   const { data: monthRevenue } = useQuery({
     queryFn: getMonthRevenue,
-    queryKey: ['metrics', 'month-revenue'],
-  })
+    queryKey: ["metrics", "month-revenue"],
+  });
 
   return (
     <Card>
@@ -24,24 +24,24 @@ export function MonthRevenueCard() {
         {monthRevenue ? (
           <>
             <span className="text-2xl font-bold tracking-tight">
-              {(monthRevenue.receipt / 100).toLocaleString('pt-BR', {
-                style: 'currency',
-                currency: 'BRL',
+              {(monthRevenue.receipt / 100).toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL",
               })}
             </span>
             <p className="text-xs text-muted-foreground">
               {monthRevenue?.diffFromLastMonth >= 0 ? (
                 <>
-                  <span className="text-emerald-500 dark:text-emerald-400">
+                  <strong className="text-emerald-500 dark:text-emerald-400">
                     +{monthRevenue?.diffFromLastMonth}%
-                  </span>{' '}
+                  </strong>{" "}
                   em relação ao mês passado
                 </>
               ) : (
                 <>
-                  <span className="text-rose-500 dark:text-rose-400">
+                  <strong className="text-rose-500 dark:text-rose-400">
                     {monthRevenue?.diffFromLastMonth}%
-                  </span>{' '}
+                  </strong>{" "}
                   em relação ao mês passado
                 </>
               )}
@@ -52,5 +52,5 @@ export function MonthRevenueCard() {
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

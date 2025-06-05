@@ -1,23 +1,26 @@
-import { useMutation } from '@tanstack/react-query'
-import { Helmet } from 'react-helmet-async'
-import { useForm } from 'react-hook-form'
-import { Link, useSearchParams } from 'react-router-dom'
-import { toast } from 'sonner'
-import { z } from 'zod'
+import { useMutation } from "@tanstack/react-query";
+import { Helmet } from "react-helmet-async";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { toast } from "sonner";
+import { z } from "zod";
 
-import { signIn } from '@/api/sign-in'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { signIn } from "@/api/sign-in";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const signInForm = z.object({
   email: z.string().email(),
-})
+  password: z.string(),
+});
 
-type SignInForm = z.infer<typeof signInForm>
+type SignInForm = z.infer<typeof signInForm>;
 
 export function SignIn() {
-  const [searchParams] = useSearchParams()
+  const [searchParams] = useSearchParams();
+
+  const navigate = useNavigate();
 
   const {
     register,
@@ -25,26 +28,21 @@ export function SignIn() {
     formState: { isSubmitting },
   } = useForm<SignInForm>({
     defaultValues: {
-      email: searchParams.get('email') ?? '',
+      email: searchParams.get("email") ?? "",
     },
-  })
+  });
 
   const { mutateAsync: authenticate } = useMutation({
     mutationFn: signIn,
-  })
+  });
 
   async function handleSignIn(data: SignInForm) {
     try {
-      await authenticate({ email: data.email })
+      await authenticate({ email: data.email, password: data.password });
 
-      toast.success('Enviamos um link de autenticação para seu e-mail.', {
-        action: {
-          label: 'Reenviar',
-          onClick: () => handleSignIn(data),
-        },
-      })
+      navigate("/");
     } catch {
-      toast.error('Credenciais inválidas.')
+      toast.error("Credenciais inválidas.");
     }
   }
 
@@ -69,7 +67,12 @@ export function SignIn() {
           <form onSubmit={handleSubmit(handleSignIn)} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Seu e-mail</Label>
-              <Input id="email" type="email" {...register('email')} />
+              <Input id="email" type="email" {...register("email")} />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="email">Seu Senha</Label>
+              <Input id="email" {...register("password")} />
             </div>
 
             <Button disabled={isSubmitting} className="w-full" type="submit">
@@ -79,5 +82,5 @@ export function SignIn() {
         </div>
       </div>
     </>
-  )
+  );
 }
